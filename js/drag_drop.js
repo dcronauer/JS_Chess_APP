@@ -4,11 +4,11 @@ let grabbed = null;
 // define tiles
 let td = $("td");
 //define pieces
-let piece = $(".piece");
+let pieceMove = $(".piece");
 
-console.log(piece);
 
-piece.on('dragstart',(event)=>{
+
+pieceMove.on('dragstart',(event)=>{
     dragged = event.target;
     console.log(dragged, "piece dragged");
 });
@@ -23,9 +23,10 @@ td.on('dragover',(event)=>{
 td.on('drop',(event)=>{
     //prevent default
     event.preventDefault();
-    console.log("drop called", event.target.className);
+    console.log("drop called", event.target);
+    //$targetTile = $()
     //move to selected drop target
-    if(event.target.className === "white" || event.target.className === "black")
+    if(event.target.classList.contains('tile'))
     {
         dragged.parentNode.removeChild(dragged);
         event.target.appendChild(dragged);

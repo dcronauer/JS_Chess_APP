@@ -70,11 +70,15 @@ function createBlackBoard(arrayColumns,arrayRows){
 createWhiteBoard(arrayColumns,arrayRows);
 //createBlackBoard(arrayColumns,arrayRows);
 let position = "A8";
-let piece = '<img src="../images/black_r.png" alt="">';
+let piece = '<img src="./images/black_r.png" alt="" draggable="true" class="piece">';
+
+let position2 = "A1"
+let piece2 = '<img src="./images/white_r.png" alt="" draggable="true" class="piece">';
 function addPieceBoard(position,piece)
 {
     let tile = $("#"+position);
     tile.append(piece);
 }
 
-addPieceBoard(position,tile);
+addPieceBoard(position,piece);
+addPieceBoard(position2,piece2);
