@@ -1,0 +1,17 @@
+table {
+    border-spacing: 0;
+}
+
+td{
+    width: 100px;
+    height: 100px;
+    
+    margin: 0 auto;
+    padding: 0;
+}
+.white {
+    background-color: red;
+}
+.black {
+    background-color: black;
+}
