@@ -4,6 +4,7 @@ let arrayColumns = ["A","B","C","D","E","F","G","H"];
 let arrayRows = [1,2,3,4,5,6,7,8];
 // jQuery selector for tbody element will use to append
 let board = $("#boardBody");
+let pieceMap = new Map();
 
 function createWhiteBoard(arrayColumns,arrayRows){
     // if array is sorted ascending reverse to descending
@@ -66,19 +67,31 @@ function createBlackBoard(arrayColumns,arrayRows){
     }
     
 }
+for (const column of arrayColumns) {
+    let key = "";
+    for (const row of arrayRows) {
+        key = column + row;
+        value = false;
+        pieceMap.set(key,value);
+    }
+    
+}
 
 createWhiteBoard(arrayColumns,arrayRows);
 //createBlackBoard(arrayColumns,arrayRows);
-let position = "A8";
-let piece = '<img src="./images/black_r.png" alt="" draggable="true" class="piece">';
+let position1 = "A8";
+let color = "black";
 
-let position2 = "A1"
-let piece2 = '<img src="./images/white_r.png" alt="" draggable="true" class="piece">';
-function addPieceBoard(position,piece)
-{
-    let tile = $("#"+position);
-    tile.append(piece);
-}
+let r1 = new Rook(position1,color);
+let r2 = new Rook("A1","white");
 
-addPieceBoard(position,piece);
-addPieceBoard(position2,piece2);
+//console.log(r1.getPosition());
+//console.log(pieceMap.get(r1.getPosition()));
+pieceMap.set(r1.getPosition().r1);
+pieceMap.set(r2,getPosition().r2);
+
+console.log(pieceMap);
+
+
+
+
