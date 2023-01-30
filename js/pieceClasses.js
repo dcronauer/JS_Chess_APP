@@ -60,6 +60,11 @@ class Piece {
     {
         return this.#possibleMoves;
     }
+
+    setPosition(pos)
+    {
+        this.#position = pos;
+    }
    
     //methods
     addPieceBoard()
@@ -73,13 +78,17 @@ class Piece {
     // setPossible moves
     setPossibleMoves()
     {
+        
+        console.log("called setPossibleMoves");
+        console.log(this.getMoves());
         let pos = this.getPosition();
-        switch(mthis.getMtype())
+        switch(this.getMtype())
         {
             case "diagonal":
                 
                 break;
-            case "bidirectional":
+            case "bi":
+                console.log('entered bidirection')
                 this.upMoves(pos);
                 this.downMoves(pos);
                 console.log(this.#possibleMoves);
@@ -97,31 +106,48 @@ class Piece {
     } 
     upMoves(pos)
     {
-        let row = pos[1];
+        let row = parseInt(pos[1]);
         let column = pos[0];
 
         let newPos ="";
+        let occupiedPiece;
 
-        for(i = row + 1; i <= 8; ++i)
+        console.log(column + row, "pos up newPos: ", );
+        console.log(row + 1);
+        for(let i = row + 1; i <= 8; ++i)
         {
+            console.log(i);
             newPos = column + i;
+            console.log(newPos);
             if($("#"+newPos).children().length == 0)
             {
                 this.#possibleMoves.set(newPos,true);
             } else if($("#"+newPos).children().length > 0)
             {
-                console.log("conflict");
+                console.log(newPos, " value for newPos");
+                occupiedPiece = pieceMap.get(newPos);
+                if(this.#color != occupiedPiece.getColor())
+                {
+                    this.#possibleMoves.set(newPos,true);
+                    return;
+                }
+                else
+                {
+                    return;
+                }
             }
         }
     }
     downMoves(pos)
     {
-        let row = pos[1];
+        let row = parseInt(pos[1]);
         let column = pos[0];
-
+        
         let newPos ="";
 
-        for(i = row + 1; i >= 1; --i)
+        let occupiedPiece;
+
+        for(let i = row - 1; i >= 1; --i)
         {
             newPos = column + i;
             if($("#"+newPos).children().length == 0)
@@ -129,7 +155,18 @@ class Piece {
                 this.#possibleMoves.set(newPos,true);
             } else if($("#"+newPos).children().length > 0)
             {
-                console.log("conflict");
+                
+                occupiedPiece = pieceMap.get(newPos);
+                console.log(occupiedPiece, "down move occupied");
+                if(this.#color != occupiedPiece.getColor())
+                {
+                    this.#possibleMoves.set(newPos,true);
+                    return;
+                }
+                else
+                {
+                    return;
+                }
             }
         }
     }

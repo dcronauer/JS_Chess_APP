@@ -6,7 +6,7 @@ let td = $("td");
 //define pieces
 let pieceMove = $(".piece");
 
-console.log(pieceMove[0], "this is the piece");
+
 
 console.log(pieceMove, "this is what can be moved");
 
@@ -14,9 +14,7 @@ pieceMove.on('dragstart',(event)=>{
     dragged = event.target;
 
     //console.log(dragged.innerHTML());
-    event.DataTransfer.clearData();
     
-    event.DataTransfer.setData("text/plain",event.target);
     console.log(dragged, "piece dragged");
 });
 
@@ -31,15 +29,58 @@ td.on('dragover',(event)=>{
 td.on('drop',(event)=>{
     //prevent default
     event.preventDefault();
-    console.log("drop called", event.target);
-    console.log(event.target.attr('data-pos'));
+    
+    // get pos from dragged item
+    let pos = dragged.dataset.pos;
+    
+    console.log("drop called position: ", pos);
+
+    let piece = pieceMap.get(pos);
+
+    console.log(piece);
+
+    piece.setPossibleMoves();
+    console.log(piece.getMoves(), "drop function");
+
+
+    let occupied;
+   
+
     //$targetTile = $()
     //move to selected drop target
     if(event.target.classList.contains('tile'))
     {
-        dragged.parentNode.removeChild(dragged);
-        event.target.appendChild(dragged);
+        let pos = event.target.id;
+        let tile = $("#"+pos);
+        
+        console.log("this is the position tile: ", pos);
+        
+        console.log(tile.children().children, "tile test");
+        if(tile.children().length == 0)
+        {
+            console.log("empty, move piece");
+            pieceMap.set(piece.getPosition(), false);
+            piece.setPosition(pos);
+            pieceMap.set(pos,piece);
+            dragged.parentNode.removeChild(dragged);
+            event.target.appendChild(dragged);
+        } else if(tile.children.length > 0)
+        {
+            //time to destroy chess piece
+            occupied = pieceMap.get(pos);
+            console.log(occupied, "piece to be eaten");
+            pieceMap.set(piece.getPosition(),false);
+            piece.setPosition(pos);
+            pieceMap.set(pos,piece);
+            dragged.parentNode.removeChild(dragged);
+            tile.empty();
+            tile.append(dragged);
+        }
+    } else if(event.target.classList.contains('piece'))
+    {
+        console.log("got into piece take");
     }
+    console.log(pieceMap);
 });
 
 

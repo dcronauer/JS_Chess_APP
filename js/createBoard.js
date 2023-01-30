@@ -87,8 +87,8 @@ let r2 = new Rook("A1","white");
 
 //console.log(r1.getPosition());
 //console.log(pieceMap.get(r1.getPosition()));
-pieceMap.set(r1.getPosition().r1);
-pieceMap.set(r2,getPosition().r2);
+pieceMap.set(r1.getPosition(),r1);
+pieceMap.set(r2.getPosition(),r2);
 
 console.log(pieceMap);
 
