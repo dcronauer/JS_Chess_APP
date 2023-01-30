@@ -65,6 +65,10 @@ class Piece {
     {
         this.#position = pos;
     }
+
+    clearPossible() {
+        this.#possibleMoves.clear();
+    }
    
     //methods
     addPieceBoard()
@@ -126,6 +130,7 @@ class Piece {
             {
                 console.log(newPos, " value for newPos");
                 occupiedPiece = pieceMap.get(newPos);
+                console.log("position: " + newPos + "piece: " + occupiedPiece);
                 if(this.#color != occupiedPiece.getColor())
                 {
                     this.#possibleMoves.set(newPos,true);

@@ -15,7 +15,7 @@ pieceMove.on('dragstart',(event)=>{
 
     //console.log(dragged.innerHTML());
     
-    console.log(dragged, "piece dragged");
+    console.log(dragged.pos, "piece dragged position");
 });
 
 //console.log(td);
@@ -37,6 +37,8 @@ td.on('drop',(event)=>{
 
     let piece = pieceMap.get(pos);
 
+    piece.clearPossible();
+
     console.log(piece);
 
     piece.setPossibleMoves();
@@ -44,50 +46,81 @@ td.on('drop',(event)=>{
 
 
     let occupied;
-   
-
+    let tileValid;
+    let posTile;
+    let tile;
     //$targetTile = $()
     //move to selected drop target
     if(event.target.classList.contains('tile'))
     {
-        let pos = event.target.id;
-        let tile = $("#"+pos);
+        posTile = event.target.id;
+        tile = $("#"+posTile);
+        console.log(tile);
         
-        console.log("this is the position tile: ", pos);
+        console.log("this is the position tile: ", posTile);
         
+        tileValid = piece.getMoves().has(posTile);
+
+        console.log(tileValid, "this is test tile");
+
         console.log(tile.children().children, "tile test");
-        if(tile.children().length == 0)
+        if(tile.children().length == 0 && tileValid)
         {
             console.log("empty, move piece");
             pieceMap.set(piece.getPosition(), false);
-            piece.setPosition(pos);
-            pieceMap.set(pos,piece);
+            piece.setPosition(posTile);
+            pieceMap.set(posTile,piece);
             dragged.parentNode.removeChild(dragged);
             event.target.appendChild(dragged);
-        } else if(tile.children.length > 0)
+            dragged.dataset.pos = posTile;
+            console.log("updated location", dragged.dataset.pos);
+        } else if(tile.children.length > 0 && tileValid)
         {
             //time to destroy chess piece
             occupied = pieceMap.get(pos);
             console.log(occupied, "piece to be eaten");
             pieceMap.set(piece.getPosition(),false);
-            piece.setPosition(pos);
-            pieceMap.set(pos,piece);
+            piece.setPosition(posTile);
+            pieceMap.set(posTile,piece);
             dragged.parentNode.removeChild(dragged);
             tile.empty();
             tile.append(dragged);
+            dragged.dataset.pos = posTile;
         }
-    } else if(event.target.classList.contains('piece'))
+    } else 
     {
-        console.log("got into piece take");
-    }
+
+        console.log("entered else ");
+        posTile = event.target.dataset.pos;
+        tile = $("#"+posTile);
+        
+        console.log("this is the position tile: ", posTile);
+        
+        tileValid = piece.getMoves().has(posTile);
+
+        console.log(tileValid, "this is test piece");
+
+        console.log(tile.children().children, "tile test")
+         //time to destroy chess piece
+         occupied = pieceMap.get(pos);
+         console.log(occupied, "piece to be eaten");
+         pieceMap.set(piece.getPosition(),false);
+         piece.setPosition(posTile);
+         pieceMap.set(posTile,piece);
+         dragged.parentNode.removeChild(dragged);
+         tile.empty();
+         tile.append(dragged);
+         dragged.dataset.pos = posTile;
+    } 
+    //piece.clearPossible();
     console.log(pieceMap);
+    dragged = null;
 });
 
 
-function drag(ev)
-{
+function drag(ev) {
     ev.dataTransfer.setData("text",ev.target.id);
     console.log("entered drag");
-}
+ }
 
 console.log('page loaded');
