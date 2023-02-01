@@ -26,6 +26,7 @@ td.on('dragover',(event)=>{
     
 });
 
+// meat and potatoes
 td.on('drop',(event)=>{
     //prevent default
     event.preventDefault();
@@ -39,7 +40,7 @@ td.on('drop',(event)=>{
 
     piece.clearPossible();
 
-    console.log(piece);
+    //console.log(piece);
 
     piece.setPossibleMoves();
     console.log(piece.getMoves(), "drop function");
@@ -74,6 +75,7 @@ td.on('drop',(event)=>{
             event.target.appendChild(dragged);
             dragged.dataset.pos = posTile;
             console.log("updated location", dragged.dataset.pos);
+            piece.setMoved(true);
         } else if(tile.children.length > 0 && tileValid)
         {
             //time to destroy chess piece
@@ -86,6 +88,7 @@ td.on('drop',(event)=>{
             tile.empty();
             tile.append(dragged);
             dragged.dataset.pos = posTile;
+            piece.setMoved(true);
         }
     } else 
     {
@@ -111,6 +114,7 @@ td.on('drop',(event)=>{
          tile.empty();
          tile.append(dragged);
          dragged.dataset.pos = posTile;
+         piece.setMoved(true);
     } 
     //piece.clearPossible();
     console.log(pieceMap);
@@ -123,4 +127,4 @@ function drag(ev) {
     console.log("entered drag");
  }
 
-console.log('page loaded');
+//console.log('page loaded');

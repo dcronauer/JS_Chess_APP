@@ -60,15 +60,16 @@ class Piece {
     {
         return this.#possibleMoves;
     }
-
+    // setters
     setPosition(pos)
     {
         this.#position = pos;
     }
-
-    clearPossible() {
-        this.#possibleMoves.clear();
+    setMoved(boolValue)
+    {
+        this.#moved = boolValue;
     }
+
    
     //methods
     addPieceBoard()
@@ -78,6 +79,11 @@ class Piece {
         console.log(tile, this.getImage());
         tile.append(this.getImage());
     }
+    // clear array moves
+    clearPossible() {
+        this.#possibleMoves.clear();
+    }
+   
 
     // setPossible moves
     setPossibleMoves()
@@ -95,6 +101,7 @@ class Piece {
                 console.log('entered bidirection')
                 this.upMoves(pos);
                 this.downMoves(pos);
+                this.rightMoves(pos);
                 console.log(this.#possibleMoves);
                 break;
             case "omnidirectional":
@@ -108,18 +115,20 @@ class Piece {
                 break;
         }
     } 
+    // movement logic
     upMoves(pos)
     {
         let row = parseInt(pos[1]);
         let column = pos[0];
-
+        let range = this.getRange();
         let newPos ="";
         let occupiedPiece;
 
         console.log(column + row, "pos up newPos: ", );
         console.log(row + 1);
-        for(let i = row + 1; i <= 8; ++i)
+        for(let i = row + 1; i <= 8 && range > 0; ++i)
         {
+            --range;
             console.log(i);
             newPos = column + i;
             console.log(newPos);
@@ -147,14 +156,50 @@ class Piece {
     {
         let row = parseInt(pos[1]);
         let column = pos[0];
+        let range = this.getRange();
         
         let newPos ="";
 
         let occupiedPiece;
 
-        for(let i = row - 1; i >= 1; --i)
+        for(let i = row - 1; i >= 1 && range > 0; --i)
         {
+            --range;
             newPos = column + i;
+            if($("#"+newPos).children().length == 0)
+            {
+                this.#possibleMoves.set(newPos,true);
+            } else if($("#"+newPos).children().length > 0)
+            {
+                
+                occupiedPiece = pieceMap.get(newPos);
+                console.log(occupiedPiece, "down move occupied");
+                if(this.#color != occupiedPiece.getColor())
+                {
+                    this.#possibleMoves.set(newPos,true);
+                    return;
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
+    }
+    rightMoves(pos)
+    {
+        let row = parseInt(pos[1]);
+        let column = pos[0];
+        let range = this.getRange();
+        let startIndex = arrayColumns.indexOf(column) + 1; // since this is a alpha character, need to pass column to get value of index, then since index starts at 0 add one
+        let newPos ="";
+
+        let occupiedPiece;
+        // since we want to move right need to have range > 0 and go until i >= 8
+        for(let i = startIndex + 1; i >= 1 && range > 0; ++i)
+        {
+            --range;
+            newPos = arrayColumns[i] + row;
             if($("#"+newPos).children().length == 0)
             {
                 this.#possibleMoves.set(newPos,true);
@@ -185,9 +230,9 @@ class Rook extends Piece {
     {
         let imageLoc = "";
         if(color == "white")
-            imageLoc = '<img src="./images/white_r.png" alt="" draggable="true" class="piece" data-pos="'+ position + '">';
+            imageLoc = '<img src="./images/white_r.png" alt="" draggable="true" class="piece whitePiece" data-pos="'+ position + '">';
         else if (color == "black")
-            imageLoc = '<img src="./images/black_r.png" alt="" draggable="true" class="piece" data-pos="'+ position + '">';
+            imageLoc = '<img src="./images/black_r.png" alt="" draggable="true" class="piece blackPiece" data-pos="'+ position + '">';
         super(position,"rook",color,8,"bi",imageLoc);
         super.addPieceBoard();
     }

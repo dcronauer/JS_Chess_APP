@@ -34,6 +34,16 @@ function createWhiteBoard(arrayColumns,arrayRows){
             count++;
         }
     }
+
+    for (const column of arrayColumns) {
+        let key = "";
+        for (const row of arrayRows) {
+            key = column + row;
+            value = false;
+            pieceMap.set(key,value);
+        }
+        
+    }
     
 }
 
@@ -65,17 +75,9 @@ function createBlackBoard(arrayColumns,arrayRows){
             count++;
         }
     }
-    
+
 }
-for (const column of arrayColumns) {
-    let key = "";
-    for (const row of arrayRows) {
-        key = column + row;
-        value = false;
-        pieceMap.set(key,value);
-    }
-    
-}
+
 
 createWhiteBoard(arrayColumns,arrayRows);
 //createBlackBoard(arrayColumns,arrayRows);
