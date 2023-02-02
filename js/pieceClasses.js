@@ -102,6 +102,7 @@ class Piece {
                 this.upMoves(pos);
                 this.downMoves(pos);
                 this.rightMoves(pos);
+                this.leftMoves(pos);
                 console.log(this.#possibleMoves);
                 break;
             case "omnidirectional":
@@ -191,15 +192,63 @@ class Piece {
         let row = parseInt(pos[1]);
         let column = pos[0];
         let range = this.getRange();
-        let startIndex = arrayColumns.indexOf(column) + 1; // since this is a alpha character, need to pass column to get value of index, then since index starts at 0 add one
+        let startIndex
+        if(column < "H") {
+            startIndex = arrayColumns.indexOf(column) + 1; // since this is a alpha character, need to pass column to get value of index, then since index starts at 0 add one
+        } else
+        {
+            // dont want to add any spaces if you are already on 8 spot
+            return;
+        }
         let newPos ="";
 
         let occupiedPiece;
         // since we want to move right need to have range > 0 and go until i >= 8
-        for(let i = startIndex + 1; i >= 1 && range > 0; ++i)
+        for(let i = startIndex + 1; i <= 8 && range > 0; ++i)
         {
             --range;
-            newPos = arrayColumns[i] + row;
+            newPos = arrayColumns[i + 1] + row;
+            if($("#"+newPos).children().length == 0)
+            {
+                this.#possibleMoves.set(newPos,true);
+            } else if($("#"+newPos).children().length > 0)
+            {
+                
+                occupiedPiece = pieceMap.get(newPos);
+                console.log(occupiedPiece, "down move occupied");
+                if(this.#color != occupiedPiece.getColor())
+                {
+                    this.#possibleMoves.set(newPos,true);
+                    return;
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
+    }
+    leftMoves(pos)
+    {
+        let row = parseInt(pos[1]);
+        let column = pos[0];
+        let range = this.getRange();
+        let startIndex 
+        if(column > "A") {
+            startIndex = arrayColumns.indexOf(column) - 1; // since this is a alpha character, need to pass column to get value of index, then since index starts at 0 add one
+        } else
+        {
+            // dont want to add any spaces if you are already on 8 spot
+            return;
+        }
+        let newPos ="";
+
+        let occupiedPiece;
+        // since we want to move right need to have range > 0 and go until i >= 8
+        for(let i = startIndex + 1; i >= 1 && range > 0; --i)
+        {
+            --range;
+            newPos = arrayColumns[i - 1] + row;
             if($("#"+newPos).children().length == 0)
             {
                 this.#possibleMoves.set(newPos,true);
